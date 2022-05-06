@@ -34,12 +34,22 @@ public class CustomerService {
         return registeredCustomer.stream().map(obj -> new CustomerDTO(obj)).collect(Collectors.toList());
     }
 
-    public CustomerDTO readById(Integer id) {
-        Optional<Customer> idCustomer = repository.findById(id);
-        return idCustomer.stream().map(obj -> new CustomerDTO(obj)).findFirst()
-                .orElseThrow(() -> new EntityNotFoundException(EntityNotFoundException.MESSAGE));
+    // public CustomerDTO readById(Integer id) {
+    // Optional<Customer> idCustomer = repository.findById(id);
+    // return idCustomer.stream().map(obj -> new CustomerDTO(obj)).findFirst()
+    // .orElseThrow(() -> new
+    // EntityNotFoundException(EntityNotFoundException.MESSAGE));
+    // }
+
+    public CustomerDTO readById(Integer id) throws EntityNotFoundException {
+        Customer idCustomer = repository.findById(id).get();
+        CustomerDTO idCustomerDTO = new CustomerDTO(idCustomer);
+        try {
+            return idCustomerDTO;
+        } catch (EntityNotFoundException e) {
+            throw new EntityNotFoundException(EntityNotFoundException.MESSAGE);
+        }
     }
-    
 
     public List<CustomerDTO> readByName(String name) {
         List<Customer> customer = repository.findByName(name);
@@ -52,15 +62,32 @@ public class CustomerService {
     }
 
     // public CustomerDTO save(Customer customerToBeSaved){
-    //     Customer customerSaved = repository.save(customerToBeSaved);
-    //     CustomerDTO newCustomer = new CustomerDTO(customerSaved);
-    //     return newCustomer
+    // Customer customerSaved = repository.save(customerToBeSaved);
+    // CustomerDTO newCustomer = new CustomerDTO(customerSaved);
+    // return newCustomer
+    // }
+
+    // public CustomerDTO update(Customer customerToBeUpdated, Integer id) {
+    //     Optional<Customer> customerById = repository.findById(id);
+    //     if (customerById.isPresent()) {
+    //         Customer customer = customerById.get();
+    //         customer.setName(customerToBeUpdated.getName());
+    //         customer.setPhoneNumber(customerToBeUpdated.getPhoneNumber());
+    //         customer.setEmail(customerToBeUpdated.getEmail());
+    //         customer.setCpf(customerToBeUpdated.getCpf());
+    //         customer.setCity(customerToBeUpdated.getCity());
+    //         customer.setCep(customerToBeUpdated.getCep());
+    //         customer.setAddress(customerToBeUpdated.getAddress());
+    //         repository.save(customer);
+    //     }
+    //     return customerById.stream().map(obj -> new CustomerDTO(obj)).findFirst()
+    //             .orElseThrow(() -> new NoSuchElementException(NoSuchElementException.MESSAGE));
     // }
 
     public CustomerDTO update(Customer customerToBeUpdated, Integer id) {
-        Optional<Customer> customerById = repository.findById(id);
-        if (customerById.isPresent()) {
-            Customer customer = customerById.get();
+        Customer customerById = repository.findById(id).get();
+        if (customerById != null) {
+            Customer customer = customerById;
             customer.setName(customerToBeUpdated.getName());
             customer.setPhoneNumber(customerToBeUpdated.getPhoneNumber());
             customer.setEmail(customerToBeUpdated.getEmail());
@@ -70,8 +97,12 @@ public class CustomerService {
             customer.setAddress(customerToBeUpdated.getAddress());
             repository.save(customer);
         }
-        return customerById.stream().map(obj -> new CustomerDTO(obj)).findFirst()
-            .orElseThrow(() -> new NoSuchElementException(NoSuchElementException.MESSAGE));
+        CustomerDTO customerByIdDTO = new CustomerDTO(customerById);
+        try {
+            return customerByIdDTO;
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException(NoSuchElementException.MESSAGE);
+        }
     }
 
     public void delete(Integer id) {
