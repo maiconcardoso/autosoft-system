@@ -23,10 +23,20 @@ public class ProductService {
         return repository.save(productToBeSaved);
     }
 
+    // public ProductDTO readById(Integer id) {
+    //     Optional<Product> productById = repository.findById(id);
+    //     return productById.stream().map((obj) -> new ProductDTO(obj)).findFirst()
+    //             .orElseThrow(() -> new EntityNotFoundException(EntityNotFoundException.MESSAGE));
+    // }
+
     public ProductDTO readById(Integer id) {
-        Optional<Product> productById = repository.findById(id);
-        return productById.stream().map((obj) -> new ProductDTO(obj)).findFirst()
-                .orElseThrow(() -> new EntityNotFoundException(EntityNotFoundException.MESSAGE));
+        Product productById = repository.findById(id).get();
+        ProductDTO productByIdDTO = new ProductDTO(productById);
+        try {
+            return productByIdDTO;
+        } catch (EntityNotFoundException e) {
+            throw new EntityNotFoundException(EntityNotFoundException.MESSAGE);
+        }
     }
 
     public List<ProductDTO> readAll() {
@@ -39,10 +49,28 @@ public class ProductService {
         return productByName.stream().map((obj) -> new ProductDTO(obj)).collect(Collectors.toList());
     }
 
+    // public ProductDTO update(Integer id, Product product) {
+    //     Optional<Product> productById = repository.findById(id);
+    //     if (productById.isPresent()) {
+    //         Product productToBeUpdate = productById.get();
+    //         productToBeUpdate.setName(product.getName());
+    //         //productToBeUpdate.setProvider(product.getProvider());
+    //         productToBeUpdate.setFactoryCode(product.getFactoryCode());
+    //         productToBeUpdate.setGroupFamily(product.getGroupFamily());
+    //         productToBeUpdate.setSubGroup(product.getSubGroup());
+    //         productToBeUpdate.setApplication(product.getApplication());
+    //         productToBeUpdate.setPrice(product.getPrice());
+    //         productToBeUpdate.setBrand(product.getBrand());
+    //         repository.save(productToBeUpdate);
+    //     }
+    //     return productById.stream().map(obj -> new ProductDTO(obj)).findFirst()
+    //             .orElseThrow(() -> new NoSuchElementException(NoSuchElementException.MESSAGE));
+    // }
+
     public ProductDTO update(Integer id, Product product) {
-        Optional<Product> productById = repository.findById(id);
-        if (productById.isPresent()) {
-            Product productToBeUpdate = productById.get();
+        Product productById = repository.findById(id).get();
+        if (productById != null) {
+            Product productToBeUpdate = productById;
             productToBeUpdate.setName(product.getName());
             //productToBeUpdate.setProvider(product.getProvider());
             productToBeUpdate.setFactoryCode(product.getFactoryCode());
@@ -53,8 +81,12 @@ public class ProductService {
             productToBeUpdate.setBrand(product.getBrand());
             repository.save(productToBeUpdate);
         }
-        return productById.stream().map(obj -> new ProductDTO(obj)).findFirst()
-                .orElseThrow(() -> new NoSuchElementException(NoSuchElementException.MESSAGE));
+        ProductDTO productByIdDTO = new ProductDTO(productById);
+        try {
+            return productByIdDTO;
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException(NoSuchElementException.MESSAGE);
+        }
     }
 
     public void delete(Integer id) {
