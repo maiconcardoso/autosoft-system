@@ -34,10 +34,20 @@ public class ProviderService {
         return list.stream().map((obj) -> new ProviderDTO(obj)).collect(Collectors.toList());
     }
 
+    // public ProviderDTO readById(Integer id) {
+    //     Optional<Provider> providerById = repository.findById(id);
+    //     return providerById.stream().map((obj) -> new ProviderDTO(obj)).findFirst()
+    //             .orElseThrow(() -> new EntityNotFoundException(EntityNotFoundException.MESSAGE));
+    // }
+
     public ProviderDTO readById(Integer id) {
-        Optional<Provider> providerById = repository.findById(id);
-        return providerById.stream().map((obj) -> new ProviderDTO(obj)).findFirst()
-                .orElseThrow(() -> new EntityNotFoundException(EntityNotFoundException.MESSAGE));
+        Provider providerById = repository.findById(id).get();
+        ProviderDTO providerByIdDTO = new ProviderDTO(providerById);
+        try {
+            return providerByIdDTO;
+        } catch (EntityNotFoundException e) {
+            throw new EntityNotFoundException(EntityNotFoundException.MESSAGE);
+        }
     }
 
     public List<ProviderDTO> readByName(String name) {
@@ -45,10 +55,27 @@ public class ProviderService {
         return providerByName.stream().map((obj) -> new ProviderDTO(obj)).collect(Collectors.toList());
     }
 
+    // public ProviderDTO update(Integer id, Provider providerToBeUpdate) {
+    //     Optional<Provider> providerById = repository.findById(id);
+    //     if (providerById.isPresent()) {
+    //         Provider provider = providerById.get();
+    //         provider.setName(providerToBeUpdate.getName());
+    //         provider.setAddress(providerToBeUpdate.getAddress());
+    //         provider.setCep(providerToBeUpdate.getCep());
+    //         provider.setCity(providerToBeUpdate.getCity());
+    //         provider.setCnpj(providerToBeUpdate.getCnpj());
+    //         provider.setEmail(providerToBeUpdate.getEmail());
+    //         provider.setPhoneNumber(providerToBeUpdate.getPhoneNumber());
+    //         repository.save(provider);
+    //     }
+    //     return providerById.stream().map((obj) -> new ProviderDTO(obj)).findFirst()
+    //             .orElseThrow(() -> new NoSuchElementException(NoSuchElementException.MESSAGE));
+    // }
+
     public ProviderDTO update(Integer id, Provider providerToBeUpdate) {
-        Optional<Provider> providerById = repository.findById(id);
-        if (providerById.isPresent()) {
-            Provider provider = providerById.get();
+        Provider providerById = repository.findById(id).get();
+        if (providerById != null) {
+            Provider provider = providerById;
             provider.setName(providerToBeUpdate.getName());
             provider.setAddress(providerToBeUpdate.getAddress());
             provider.setCep(providerToBeUpdate.getCep());
@@ -58,8 +85,12 @@ public class ProviderService {
             provider.setPhoneNumber(providerToBeUpdate.getPhoneNumber());
             repository.save(provider);
         }
-        return providerById.stream().map((obj) -> new ProviderDTO(obj)).findFirst()
-                .orElseThrow(() -> new NoSuchElementException(NoSuchElementException.MESSAGE));
+        ProviderDTO providerByIdDTO = new ProviderDTO(providerById);
+        try {
+            return providerByIdDTO;
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException(NoSuchElementException.MESSAGE);
+        }
     }
 
     public void deleteById(Integer id) {
