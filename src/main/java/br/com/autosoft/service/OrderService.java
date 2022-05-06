@@ -47,9 +47,19 @@ public class OrderService {
         return orderByNameCustomer.stream().map((obj) -> new OrderDTO(obj)).collect(Collectors.toList());
     }
 
-    public Optional<OrderDTO> readByIdCustomer(Integer id) {
-        Optional<Order> orderByIdCustomer = repository.findByCustomerId(id);
-        return orderByIdCustomer.stream().map(obj -> new OrderDTO(obj)).findFirst();
+    // public Optional<OrderDTO> readByIdCustomer(Integer id) {
+    //     Optional<Order> orderByIdCustomer = repository.findByCustomerId(id);
+    //     return orderByIdCustomer.stream().map(obj -> new OrderDTO(obj)).findFirst();
+    // }
+
+    public OrderDTO readByIdCustomer(Integer id) {
+        Order orderByIdCustomer = repository.findByCustomerId(id).get();
+        OrderDTO orderByIdCustomerDTO = new OrderDTO(orderByIdCustomer);
+        try {
+            return orderByIdCustomerDTO;
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException(NoSuchElementException.MESSAGE);
+        }
     }
 
     public OrderDTO save(Order order) {

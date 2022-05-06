@@ -105,9 +105,16 @@ public class CustomerService {
         }
     }
 
+    // public void delete(Integer id) {
+    //     Optional<OrderDTO> idCustomer = orderService.readByIdCustomer(id);
+    //     if (idCustomer.isEmpty()) {
+    //         repository.deleteById(id);
+    //     }
+    // }
+
     public void delete(Integer id) {
-        Optional<OrderDTO> idCustomer = orderService.readByIdCustomer(id);
-        if (idCustomer.isEmpty()) {
+        OrderDTO idCustomer = orderService.readByIdCustomer(id);
+        if (idCustomer != null) {
             repository.deleteById(id);
         }
     }
