@@ -29,10 +29,20 @@ public class OrderItemService {
         return order.stream().map(obj -> new OrderItemDTO(obj)).collect(Collectors.toList());
     }
 
+    // public OrderItemDTO readById(Integer id) {
+    //     Optional<OrderItem> orderItemById = repository.findById(id);
+    //     return orderItemById.stream().map((obj) -> new OrderItemDTO(obj)).findFirst()
+    //             .orElseThrow(() -> new NoSuchElementException(NoSuchElementException.MESSAGE));
+    // }
+
     public OrderItemDTO readById(Integer id) {
-        Optional<OrderItem> orderItemById = repository.findById(id);
-        return orderItemById.stream().map((obj) -> new OrderItemDTO(obj)).findFirst()
-                .orElseThrow(() -> new NoSuchElementException(NoSuchElementException.MESSAGE));
+        OrderItem orderItemById = repository.findById(id).get();
+        OrderItemDTO orderItemByIdDTO = new OrderItemDTO(orderItemById);
+        try {
+            return orderItemByIdDTO;
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException(NoSuchElementException.MESSAGE);
+        }
     }
 
     public List<OrderItemDTO> readByIdProduct(Integer id_product) {
@@ -48,18 +58,36 @@ public class OrderItemService {
         return orderItemSaved;
     }
 
+    // public OrderItemDTO update(Integer id, OrderItem orderItem) {
+    //     Optional<OrderItem> orderItemById = repository.findById(id);
+    //     if (orderItemById.isPresent()) {
+    //         OrderItem orderItemForToUpdated = orderItemById.get();
+    //         orderItemForToUpdated.setOrder(orderItem.getOrder());
+    //         orderItemForToUpdated.setProduct(orderItem.getProduct());
+    //         orderItemForToUpdated.setSubTotal(orderItem.getSubTotal());
+    //         orderItemForToUpdated.setQuantity(orderItem.getQuantity());
+    //         repository.save(orderItemForToUpdated);
+    //     }
+    //     return orderItemById.map((obj) -> new OrderItemDTO(obj))
+    //             .orElseThrow(() -> new EntityNotFoundException(EntityNotFoundException.MESSAGE));
+    // }
+
     public OrderItemDTO update(Integer id, OrderItem orderItem) {
-        Optional<OrderItem> orderItemById = repository.findById(id);
-        if (orderItemById.isPresent()) {
-            OrderItem orderItemForToUpdated = orderItemById.get();
+        OrderItem orderItemById = repository.findById(id).get();
+        if (orderItemById != null) {
+            OrderItem orderItemForToUpdated = orderItemById;
             orderItemForToUpdated.setOrder(orderItem.getOrder());
             orderItemForToUpdated.setProduct(orderItem.getProduct());
             orderItemForToUpdated.setSubTotal(orderItem.getSubTotal());
             orderItemForToUpdated.setQuantity(orderItem.getQuantity());
             repository.save(orderItemForToUpdated);
         }
-        return orderItemById.map((obj) -> new OrderItemDTO(obj))
-                .orElseThrow(() -> new EntityNotFoundException(EntityNotFoundException.MESSAGE));
+        OrderItemDTO orderItemByIdDTO = new OrderItemDTO(orderItemById);
+        try {
+            return orderItemByIdDTO;
+        } catch (EntityNotFoundException e) {
+            throw new EntityNotFoundException(EntityNotFoundException.MESSAGE);
+        }
     }
 
     public void delete(Integer id) {
