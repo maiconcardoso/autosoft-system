@@ -12,9 +12,9 @@
 	<artifactId>autosoft-system</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>autosoft-system</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Sistema Autosoft API</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>1.8</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -67,19 +67,6 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.9.0</version>
-				<configuration>
-					<source>11</source>
-					<target>11</target>
-				</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 	</build>
 
 </project>
