@@ -29,10 +29,20 @@ public class OrderLaborService {
         return orderLaborList.stream().map((obj) -> new OrderLaborDTO(obj)).collect(Collectors.toList());
     }
 
+    // public OrderLaborDTO readById(Integer id) {
+    //     Optional<OrderLabor> orderLaborById = repository.findById(id);
+    //     return orderLaborById.stream().map((obj) -> new OrderLaborDTO(obj)).findFirst()
+    //             .orElseThrow(() -> new EntityNotFoundException(EntityNotFoundException.MESSAGE));
+    // }
+
     public OrderLaborDTO readById(Integer id) {
-        Optional<OrderLabor> orderLaborById = repository.findById(id);
-        return orderLaborById.stream().map((obj) -> new OrderLaborDTO(obj)).findFirst()
-                .orElseThrow(() -> new EntityNotFoundException(EntityNotFoundException.MESSAGE));
+        OrderLabor orderLaborById = repository.findById(id).get();
+        OrderLaborDTO orderLaborByIdDTO = new OrderLaborDTO(orderLaborById);
+        try {
+            return orderLaborByIdDTO;
+        } catch (EntityNotFoundException e) {
+            throw new EntityNotFoundException(EntityNotFoundException.MESSAGE);
+        }
     }
 
     public List<OrderLaborDTO> readByIdLabor(Integer id_labor) {
@@ -48,10 +58,25 @@ public class OrderLaborService {
         return orderLaborSaved;
     }
 
+    // public OrderLaborDTO update(Integer id, OrderLabor orderLabor) {
+    //     Optional<OrderLabor> orderLaborById = repository.findById(id);
+    //     if (orderLaborById.isPresent()) {
+    //         OrderLabor orderLaborUpdate = orderLaborById.get();
+    //         orderLaborUpdate.setId(orderLabor.getId());
+    //         orderLaborUpdate.setLabor(orderLabor.getLabor());
+    //         orderLaborUpdate.setOrder(orderLabor.getOrder());
+    //         orderLaborUpdate.setSubTotal(orderLabor.getSubTotal());
+    //         orderLaborUpdate.setQuantity(orderLabor.getQuantity());
+    //         repository.save(orderLaborUpdate);
+    //     }
+    //     return orderLaborById.stream().map((obj) -> new OrderLaborDTO(obj)).findFirst()
+    //             .orElseThrow(() -> new EntityNotFoundException(EntityNotFoundException.MESSAGE));
+    // }
+
     public OrderLaborDTO update(Integer id, OrderLabor orderLabor) {
-        Optional<OrderLabor> orderLaborById = repository.findById(id);
-        if (orderLaborById.isPresent()) {
-            OrderLabor orderLaborUpdate = orderLaborById.get();
+        OrderLabor orderLaborById = repository.findById(id).get();
+        if (orderLaborById != null) {
+            OrderLabor orderLaborUpdate = orderLaborById;
             orderLaborUpdate.setId(orderLabor.getId());
             orderLaborUpdate.setLabor(orderLabor.getLabor());
             orderLaborUpdate.setOrder(orderLabor.getOrder());
@@ -59,8 +84,12 @@ public class OrderLaborService {
             orderLaborUpdate.setQuantity(orderLabor.getQuantity());
             repository.save(orderLaborUpdate);
         }
-        return orderLaborById.stream().map((obj) -> new OrderLaborDTO(obj)).findFirst()
-                .orElseThrow(() -> new EntityNotFoundException(EntityNotFoundException.MESSAGE));
+        OrderLaborDTO orderLaborByIdDTO = new OrderLaborDTO(orderLaborById);
+        try {
+            return orderLaborByIdDTO;
+        } catch (EntityNotFoundException e) {
+            throw new EntityNotFoundException(EntityNotFoundException.MESSAGE);
+        }
     }
 
     public void delete(Integer id) {
