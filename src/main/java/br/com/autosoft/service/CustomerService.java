@@ -113,9 +113,6 @@ public class CustomerService {
     // }
 
     public void delete(Integer id) {
-        OrderDTO idCustomer = orderService.readByIdCustomer(id);
-        if (idCustomer != null) {
-            repository.deleteById(id);
-        }
+        repository.deleteById(id);
     }
 }

@@ -51,10 +51,10 @@ public class OrderLaborService {
     }
 
     public OrderLaborDTO create(OrderLabor orderLabor, Integer id_order) {
-        Order newOrder = orderRepository.findById(id_order).get();
-        orderLabor.setOrder(newOrder);
-        OrderLabor orderLaborToBeSaved = repository.save(orderLabor);
-        OrderLaborDTO orderLaborSaved = new OrderLaborDTO(orderLaborToBeSaved);
+        Order order = orderRepository.findById(id_order).get();
+        orderLabor.setOrder(order);
+        OrderLabor orderLaborForSaved = repository.save(orderLabor);
+        OrderLaborDTO orderLaborSaved = new OrderLaborDTO(orderLaborForSaved);
         return orderLaborSaved;
     }
 

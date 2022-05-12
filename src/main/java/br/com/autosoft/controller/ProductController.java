@@ -21,6 +21,7 @@ import br.com.autosoft.entities.Product;
 import br.com.autosoft.service.ProductService;
 
 @CrossOrigin(origins = "https://autosoft-system.firebaseapp.com")
+//@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("v1/products")
 public class ProductController {

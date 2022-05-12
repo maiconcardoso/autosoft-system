@@ -23,6 +23,7 @@ import br.com.autosoft.entities.Customer;
 import br.com.autosoft.service.CustomerService;
 
 @CrossOrigin(origins = "https://autosoft-system.firebaseapp.com")
+//@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("v1/customers")
 public class CustomerController {

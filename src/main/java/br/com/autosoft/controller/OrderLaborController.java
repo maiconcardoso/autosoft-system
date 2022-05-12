@@ -21,6 +21,7 @@ import br.com.autosoft.entities.OrderLabor;
 import br.com.autosoft.service.OrderLaborService;
 
 @CrossOrigin(origins = "https://autosoft-system.firebaseapp.com")
+//@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("v1/order-labors")
 public class OrderLaborController {

@@ -21,6 +21,7 @@ import br.com.autosoft.entities.Provider;
 import br.com.autosoft.service.ProviderService;
 
 @CrossOrigin(origins = "https://autosoft-system.firebaseapp.com")
+//@CrossOrigin(origins = "http://localhost:4200")
 @RestController 
 @RequestMapping("/v1/providers")
 public class ProviderController {
