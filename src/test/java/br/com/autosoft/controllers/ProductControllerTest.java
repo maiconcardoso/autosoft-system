@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import br.com.autosoft.controller.ProductController;
 import br.com.autosoft.dtos.ProductDTO;
 import br.com.autosoft.entities.Product;
-import br.com.autosoft.entities.Provider;
 
 @SpringBootTest
 public class ProductControllerTest {

@@ -47,20 +47,11 @@ public class OrderService {
         return orderByNameCustomer.stream().map((obj) -> new OrderDTO(obj)).collect(Collectors.toList());
     }
 
-    // public Optional<OrderDTO> readByIdCustomer(Integer id) {
-    //     Optional<Order> orderByIdCustomer = repository.findByCustomerId(id);
-    //     return orderByIdCustomer.stream().map(obj -> new OrderDTO(obj)).findFirst();
-    // }
-
-    public OrderDTO readByIdCustomer(Integer id) {
-        Order orderByIdCustomer = repository.findByCustomerId(id).get();
-        OrderDTO orderByIdCustomerDTO = new OrderDTO(orderByIdCustomer);
-        try {
-            return orderByIdCustomerDTO;
-        } catch (NoSuchElementException e) {
-            throw new NoSuchElementException(NoSuchElementException.MESSAGE);
-        }
+    public Optional<OrderDTO> readByIdCustomer(Integer id) {
+        Optional<Order> orderByIdCustomer = repository.findByCustomerId(id);
+        return orderByIdCustomer.stream().map(obj -> new OrderDTO(obj)).findFirst();
     }
+
 
     public OrderDTO save(Order order) {
         Order orderToBySaved = repository.save(order);
@@ -68,46 +59,22 @@ public class OrderService {
         return newOrder;
     }
 
-    // public OrderDTO update(Order order, Integer id) {
-    //     Optional<Order> orderById = repository.findById(id);
-    //     if (orderById.isPresent()) {
-    //         Order orderForUpdate = orderById.get();
-    //         orderForUpdate.setStatus(order.getStatus());
-    //         orderForUpdate.setCreationDate(order.getCreationDate());
-    //         orderForUpdate.setCustomer(order.getCustomer());
-    //         repository.save(order);
-    //     }
-    //     return orderById.stream().map(obj -> new OrderDTO(obj)).findFirst()
-    //             .orElseThrow(() -> new NoSuchElementException(NoSuchElementException.MESSAGE));
-    // }
-
-    public OrderDTO update(Order order, Integer id) {
-        Order orderById = repository.findById(id).get();
-        if (orderById != null) {
-            Order orderForUpdate = orderById;
-            orderForUpdate.setStatus(order.getStatus());
-            orderForUpdate.setCreationDate(order.getCreationDate());
-            orderForUpdate.setCustomer(order.getCustomer());
-            repository.save(order);
-        }
-        OrderDTO orderByIdDTO = new OrderDTO(orderById);
-        try {
-            return orderByIdDTO;
-        } catch (NoSuchElementException e) {
-            throw new NoSuchElementException(NoSuchElementException.MESSAGE);
-        }
+     public OrderDTO update(Order order, Integer id) {
+         Optional<Order> orderById = repository.findById(id);
+         if (orderById.isPresent()) {
+             Order orderForUpdate = orderById.get();
+             orderForUpdate.setStatus(order.getStatus());
+             orderForUpdate.setCreationDate(order.getCreationDate());
+             orderForUpdate.setCustomer(order.getCustomer());
+             repository.save(order);
+         }
+         return orderById.stream().map(obj -> new OrderDTO(obj)).findFirst()
+                 .orElseThrow(() -> new NoSuchElementException(NoSuchElementException.MESSAGE));
     }
 
-    // public void delete(Integer id) {
-    //     Optional<Order> orderById = repository.findById(id);
-    //     if (!orderById.isPresent())
-    //         new NoSuchElementException(NoSuchElementException.MESSAGE);
-    //     repository.deleteById(id);
-    // }
-
     public void delete(Integer id) {
-        Order orderById = repository.findById(id).get();
-        if ((orderById == null))
+        Optional<Order> orderById = repository.findById(id);
+        if (!orderById.isPresent())
             new NoSuchElementException(NoSuchElementException.MESSAGE);
         repository.deleteById(id);
     }

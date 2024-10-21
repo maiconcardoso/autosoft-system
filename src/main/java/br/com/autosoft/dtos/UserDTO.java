@@ -2,7 +2,7 @@ package br.com.autosoft.dtos;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 import br.com.autosoft.entities.User;
 import lombok.AllArgsConstructor;

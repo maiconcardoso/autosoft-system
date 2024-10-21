@@ -2,7 +2,7 @@ package br.com.autosoft.controller.errors;
 
 import java.time.Instant;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
